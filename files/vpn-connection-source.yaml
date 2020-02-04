@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: Transit Gateway Attachment for Account
+
+Resources:
+  VPNConnection:
+    Type: AWS::EC2::VPNConnection
+    Properties: 
+      CustomerGatewayId: regexcgwid
+      StaticRoutesOnly: False
+      TransitGatewayId: regextgwid
+      Type: regexvpntype
+      VpnTunnelOptionsSpecifications: 
+        - VpnTunnelOptionsSpecification
+      
+Outputs:
+  TransitGatewayAttachment:
+    Description: A reference to the created VPNConnection
+    Value: !Ref VPNConnection
+    Export:
+      Name: !Sub ${AWS::StackName}
