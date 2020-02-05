@@ -17,9 +17,10 @@ Resources:
       TransitGatewayId: tgw-0f5a6a47f6a25f9f9
       Type: ipsec.1
       VpnTunnelOptionsSpecifications: 
-        - PreSharedKey: testpassword000001x
-        - TunnelInsideCidr: 169.254.7.0/30
-
+        - PreSharedKey: "password01"
+          TunnelInsideCidr: 169.254.49.0/30
+        - PreSharedKey: "password01"
+          TunnelInsideCidr: 169.254.49.4/30
 Outputs:
   VPNConnection:
     Description: A reference to the created VPN Connection

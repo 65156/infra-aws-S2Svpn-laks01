@@ -17,21 +17,10 @@ Resources:
       TransitGatewayId: regextgwid
       Type: regexvpntype
       VpnTunnelOptionsSpecifications: 
-        - PreSharedKey: !Ref PreSharedKey
+        - PreSharedKey: "password01"
           TunnelInsideCidr: regextunnelinside01
-        - PreSharedKey: !Ref PreSharedKey
+        - PreSharedKey: "password01"
           TunnelInsideCidr: regextunnelinside02
-  PresharedKey:
-    Type: AWS::SecretsManager::Secret
-    Properties: 
-      Description: String
-      GenerateSecretString: 
-        GenerateSecretString
-      KmsKeyId: String
-      Name: presharekey-regex
-      Tags: 
-        - Tag
-
 Outputs:
   VPNConnection:
     Description: A reference to the created VPN Connection
