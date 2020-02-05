@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: Customer Gateway for Transit Gateway
+
+Resources:
+  CustomerGateway:
+    Type: AWS::EC2::CustomerGateway
+      Properties: 
+        BgpAsn: regexbgpasn
+        IpAddress: regexendpoint
+        Type: String
+
+Outputs:
+  CustomerGateway:
+    Description: A reference to the created Customer Gateway
+    Value: !Ref CustomerGateway
+    Export:
+      Name: !Sub ${AWS::StackName} 
