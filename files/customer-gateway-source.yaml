@@ -21,6 +21,17 @@ Resources:
           TunnelInsideCidr: regextunnelinside01
         - PreSharedKey: "password01"
           TunnelInsideCidr: regextunnelinside02
+  PresharedKey:
+    Type: AWS::SecretsManager::Secret
+    Properties: 
+      Description: !Join
+        - 'password used for'
+        - !Ref VPNConnection
+      GenerateSecretString: 
+        GenerateSecretString:
+        PasswordLength: 24
+      KmsKeyId: String
+      Name: psk-regexcgw
 Outputs:
   VPNConnection:
     Description: A reference to the created VPN Connection
