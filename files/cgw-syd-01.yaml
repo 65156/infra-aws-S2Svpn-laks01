@@ -6,38 +6,38 @@ Resources:
   CustomerGateway:
     Type: AWS::EC2::CustomerGateway
     Properties: 
-      BgpAsn: regexbgpasn
-      IpAddress: regexendpoint
-      Type: regexvpntype
+      BgpAsn: 65000
+      IpAddress: 49.255.71.2
+      Type: ipsec.1
   VPNConnection:
     Type: AWS::EC2::VPNConnection
     Properties: 
       CustomerGatewayId: !Ref CustomerGateway
       StaticRoutesOnly: False
-      TransitGatewayId: regextgwid
-      Type: regexvpntype
+      TransitGatewayId: tgw-0f5a6a47f6a25f9f9
+      Type: ipsec.1
       VpnTunnelOptionsSpecifications: 
         - PreSharedKey: !Ref PresharedKey
-          TunnelInsideCidr: regextunnelinside01
+          TunnelInsideCidr: 169.254.7.0/30
         - PreSharedKey: !Ref PresharedKey
-          TunnelInsideCidr: regextunnelinside02
+          TunnelInsideCidr: 169.254.7.4/30
   PresharedKey:
     Type: AWS::SecretsManager::Secret
     Properties: 
-      Description: !Join [ '', ['password used for',regexcgw-vpn]]
+      Description: !Join [ '', ['password used for',cgw-syd-01-vpn]]
       GenerateSecretString: 
         PasswordLength: 24
         ExcludePunctuation: true
       KmsKeyId: String
-      Name: psk-regexcgw-vpn
+      Name: psk-cgw-syd-01-vpn
 Outputs:
   VPNConnection:
     Description: A reference to the created VPN Connection
     Value: !Ref VPNConnection
     Export:
-      Name: regexvpnconnection
+      Name: vpn-cgw-syd-01
   CustomerGateway:
     Description: A reference to the created Customer Gateway
     Value: !Ref CustomerGateway
     Export:
-      Name: regexcgw
+      Name: cgw-syd-01
