@@ -67,6 +67,10 @@ foreach($s in $sites){
       $tunnelinside01 = "169.254."+$ip+".0/30"
       $tunnelinside02 = "169.254."+$ip+".4/30"
 
+      #generate password for vpn
+      $charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".tochararray() 
+      $secret = ($charset | Get-Random -count 20) -join '' 
+
       # Construct .yaml cf deployment file using regex queries.
       Write-Host "Writing $outfile file" -f green ;
       (Get-Content $infile) | Foreach-Object {
@@ -75,6 +79,7 @@ foreach($s in $sites){
             -replace("regexcgw",$stackname) `
             -replace("regexbgpasn",$asn) `
             -replace("regexendpoint",$endpoint) `
+            -replace("regexsecret",$secret) `
             -replace("regextunnelinside01",$tunnelinside01) `
             -replace("regextunnelinside02",$tunnelinside02) `
             -replace("regexvpnconnection",$vpnconnection)

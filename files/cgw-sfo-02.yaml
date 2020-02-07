@@ -17,19 +17,10 @@ Resources:
       TransitGatewayId: tgw-0f5a6a47f6a25f9f9
       Type: ipsec.1
       VpnTunnelOptionsSpecifications: 
-        - PreSharedKey: !Ref PresharedKey
+        - PreSharedKey: 7NvMHBnR1swJmLOp8IjX
           TunnelInsideCidr: 169.254.24.0/30
-        - PreSharedKey: !Ref PresharedKey
+        - PreSharedKey: 7NvMHBnR1swJmLOp8IjX
           TunnelInsideCidr: 169.254.24.4/30
-  PresharedKey:
-    Type: AWS::SecretsManager::Secret
-    Properties: 
-      Description: !Join [ '', ['password used for',cgw-sfo-02-vpn]]
-      GenerateSecretString: 
-        PasswordLength: 24
-        ExcludePunctuation: true
-      KmsKeyId: String
-      Name: psk-cgw-sfo-02-vpn
 Outputs:
   VPNConnection:
     Description: A reference to the created VPN Connection
