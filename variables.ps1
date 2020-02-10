@@ -20,7 +20,7 @@
 Switch-RoleAlias master okta
 
 #special variables
-$cleanupmode = $false #<--- if true, script will delete all failed stacks only!
+$cleanupmode = $true #<--- if true, script will delete all failed stacks only!
 
 #configurable variables
 $projectname = "cgw" #<--- becomes the prefix for all cgw stack names and vpn connection stacknames 

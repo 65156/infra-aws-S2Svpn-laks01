@@ -48,7 +48,7 @@ foreach($s in $sites){
     Write-Host ""
     Write-Host "Processing:" -f black -b white -NoNewLine ; Write-Host " $projectname-$site"
     foreach($e in $endpoints){
-      $x=$x+1 ; $stack = 0 ; $stackstatus = 0 ; 
+      $x=$x+1
       $stackname = "$projectname-$site-0$x"
       $vpnconnection ="vpn-$stackname"
       $cgwfile = "./files/customer-gateway-$site.yaml"
@@ -85,6 +85,7 @@ foreach($s in $sites){
             -replace("regexvpnconnection",$vpnconnection)
           } | Set-Content $outfile -force     
 
+      $error.clear() ; $stack = 0 ; $stackstatus = 0
       try { $stackstatus = ((Get-CFNStack -Stackname $stackname -region $region).StackStatus).Value }
       catch { $stack = 1 ; Write-Host "Stack does not exist..." -f yellow } # set stack value to 1 if first deployment
       if($redeploy -eq $true){$stack = 2} #tears down the stack and redeploys if set
@@ -103,18 +104,16 @@ foreach($s in $sites){
           Remove-CFNStack -Stackname $stackname -region $region -force  
           try{ Wait-CFNStack -Stackname $stackname -region $region } catch {}# try wait for stack removal if needed, catch will hide error if stack does not exist.
           } 
-      if($stack -ge 1){  
+      if($stack -ge 1){ # Create Stack if $stack = 1 or more
           $error.clear()
           Write-host "Validating CF Template" -f cyan
           Test-CFNTemplate -templateBody (Get-Content $outfile -raw) -Region $region
           if($error.count -gt 0){Write-Host "Error Validation Failure!" -f red ; Write-Host "" ;  continue } # attempts to validate the CF template.
-          if($error.count -eq 0){Write-Host "Template is Valid" -f green ; Write-Host "" }
-          # Create Stack if $stack = 1 or more
+          if($error.count -eq 0){Write-Host "Template is Valid" -f green ; Write-Host "" } 
           Write-Host "Creating Stack" -f black -b cyan
           New-CFNStack -StackName $stackname -TemplateBody (Get-Content $outfile -raw) -Region $region
           }
-          #Remove-Item $outfile -force -Erroraction SilentlyContinue
-          Write-Host ""
+      Write-Host ""
       }
   }
 
