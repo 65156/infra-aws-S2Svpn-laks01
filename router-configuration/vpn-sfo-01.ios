@@ -1,0 +1,92 @@
+prefix-list BGP-PFFILTER-AWS description AWS
+prefix-list BGP-PFFILTER-AWS seq 5 permit 10.95.0.0/16 le 32
+prefix-list BGP-PFFILTER-AWS seq 6 permit 10.94.0.0/16 le 32
+! need to fix destination interfaces
+route OUT1 13.210.36.105 255.255.255.255 12.205.169.9 1
+route OUT1 54.66.216.45 255.255.255.255 12.205.169.9 1
+route OUT2 13.55.250.31 255.255.255.255 4.14.110.225 1
+route OUT2 52.64.57.234 255.255.255.255 4.14.110.225 1
+!
+tunnel-group 13.210.36.105 type ipsec-l2l
+tunnel-group 13.210.36.105 ipsec-attributes
+   ikev1 pre-shared-key RK7Ewq5x_kO86a7Zb2_Am6Pjr0YTz55J
+   isakmp keepalive threshold 10 retry 10
+!
+tunnel-group 54.66.216.45 type ipsec-l2l
+tunnel-group 54.66.216.45 ipsec-attributes
+   ikev1 pre-shared-key xW0BKwxJwlJMD9Dfuta_1ga81ajK5UVu
+   isakmp keepalive threshold 10 retry 10
+!
+tunnel-group 13.55.250.31 type ipsec-l2l
+tunnel-group 13.55.250.31 ipsec-attributes
+   ikev1 pre-shared-key s0Gbllx1N.Ybf4w6a_q6DBgozj0zgH1P
+   isakmp keepalive threshold 10 retry 10
+!
+tunnel-group 52.64.57.234 type ipsec-l2l
+tunnel-group 52.64.57.234 ipsec-attributes
+   ikev1 pre-shared-key IWha6mlmXhgi9V75LtGN44gojoxkVxDt
+   isakmp keepalive threshold 10 retry 10
+exit
+interface Tunnel11
+  nameif AWS-AU-VPN-010046ff9390c23cb-Tunnel-01	
+  ip address 169.254.111.54 255.255.255.252
+  tunnel source interface OUT1
+  tunnel destination 13.210.36.105
+  tunnel mode ipsec ipv4
+  tunnel protection ipsec profile AWS
+  no shutdown
+interface Tunnel12
+  nameif AWS-AU-VPN-010046ff9390c23cb-Tunnel-02		
+  ip address 169.254.111.50 255.255.255.252
+  tunnel source interface OUT1
+  tunnel destination 54.66.216.45
+  tunnel mode ipsec ipv4
+  tunnel protection ipsec profile AWS
+  no shutdown
+interface Tunnel13
+  nameif AWS-AU-VPN-0fd201a6a985f9a06-Tunnel-01
+  ip address 169.254.111.62 255.255.255.252
+  tunnel source interface OUT2
+  tunnel destination 13.55.250.31
+  tunnel mode ipsec ipv4
+  tunnel protection ipsec profile AWS
+  no shutdown
+interface Tunnel14
+  nameif AWS-AU-VPN-0fd201a6a985f9a06-Tunnel-02	
+  ip address 169.254.111.58 255.255.255.252
+  tunnel source interface OUT2
+  tunnel destination 52.64.57.234
+  tunnel mode ipsec ipv4
+  tunnel protection ipsec profile AWS
+  no shutdown
+exit
+router bgp 65004
+  address-family ipv4 unicast
+    neighbor 169.254.111.53 remote-as 65100
+    neighbor 169.254.111.53 description AWS-AU-VPN-010046ff9390c23cb-Tunnel-01	
+    neighbor 169.254.111.53 timers 10 30 30
+    neighbor 169.254.111.53 prefix-list BGP-PFFILTER-AWS in
+    neighbor 169.254.111.53 prefix-list BGP-PFFILTER-SFO out
+    neighbor 169.254.111.53 activate
+    neighbor 169.254.111.49 remote-as 65100
+    neighbor 169.254.111.49 description AWS-AU-VPN-010046ff9390c23cb-Tunnel-02
+    neighbor 169.254.111.49 timers 10 30 30
+    neighbor 169.254.111.49 prefix-list BGP-PFFILTER-AWS in
+    neighbor 169.254.111.49 prefix-list BGP-PFFILTER-SFO out
+    neighbor 169.254.111.49 activate
+    neighbor 169.254.111.61 remote-as 65100
+    neighbor 169.254.111.61 description AWS-AU-VPN-0fd201a6a985f9a06-Tunnel-01
+    neighbor 169.254.111.61 timers 10 30 30
+    neighbor 169.254.111.61 prefix-list BGP-PFFILTER-AWS in
+    neighbor 169.254.111.61 prefix-list BGP-PFFILTER-SFO out
+    neighbor 169.254.111.61 activate
+    neighbor 169.254.111.61 route-map RM-ASPATH-LOWER-PREPEND out 
+    neighbor 169.254.111.57 remote-as 65100
+    neighbor 169.254.111.57 description AWS-AU-VPN-0fd201a6a985f9a06-Tunnel-02	
+    neighbor 169.254.111.57 timers 10 30 30
+    neighbor 169.254.111.57 prefix-list BGP-PFFILTER-AWS in
+    neighbor 169.254.111.57 prefix-list BGP-PFFILTER-SFO out
+    neighbor 169.254.111.57 activate
+    neighbor 169.254.111.57 route-map RM-ASPATH-LOWER-PREPEND out
+exit
+

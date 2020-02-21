@@ -6,35 +6,35 @@ Resources:
   CustomerGateway:
     Type: AWS::EC2::CustomerGateway
     Properties: 
-      BgpAsn: regexbgpasn
-      IpAddress: regexendpoint
-      Type: regexvpntype
+      BgpAsn: 65002
+      IpAddress: 80.169.133.98
+      Type: ipsec.1
       Tags:
         -
          Key: Name
-         Value: regexcgw
+         Value: cgw-lon-01
   VPNConnection:
     Type: AWS::EC2::VPNConnection
     Properties: 
       CustomerGatewayId: !Ref CustomerGateway
       StaticRoutesOnly: False
-      TransitGatewayId: regextgwid
-      Type: regexvpntype
+      TransitGatewayId: tgw-067fc30b039641df1
+      Type: ipsec.1
       VpnTunnelOptionsSpecifications: 
-        - TunnelInsideCidr: regextunnelinside01
-        - TunnelInsideCidr: regextunnelinside02
+        - TunnelInsideCidr: 169.254.111.24/30
+        - TunnelInsideCidr: 169.254.111.28/30
       Tags:
         -
          Key: Name
-         Value: regexvpn
+         Value: vpn-lon-01
 Outputs:
   VPNConnection:
     Description: A reference to the created VPN Connection
     Value: !Ref VPNConnection
     Export:
-      Name: regexvpnconnection
+      Name: vpn-lon-01connection
   CustomerGateway:
     Description: A reference to the created Customer Gateway
     Value: !Ref CustomerGateway
     Export:
-      Name: regexcgw
+      Name: cgw-lon-01
