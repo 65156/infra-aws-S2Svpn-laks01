@@ -7,7 +7,7 @@ Resources:
     Type: AWS::EC2::CustomerGateway
     Properties: 
       BgpAsn: 65006
-      IpAddress: 172.110.66.2
+      IpAddress: 172.110.66.13
       Type: ipsec.1
       Tags:
         -
@@ -21,8 +21,8 @@ Resources:
       TransitGatewayId: tgw-067fc30b039641df1
       Type: ipsec.1
       VpnTunnelOptionsSpecifications: 
-        - TunnelInsideCidr: 169.254.111.72/30
-        - TunnelInsideCidr: 169.254.111.76/30
+        - TunnelInsideCidr: 169.254.140.72/30
+        - TunnelInsideCidr: 169.254.140.76/30
       Tags:
         -
          Key: Name

@@ -32,6 +32,8 @@ $variables = . "./variables.ps1"
 $yamltemplate= "./files/customer-gateway-source.yaml"
 $baseip=6 #<-- warning 1-5 is reserved by aws for octect tunnel inside ip 3rd octet
 $b=0
+$a=100 #starting 3rd octect for bgp interfaces (will increment based on 3rd and last digit of bgp asn)
+
 #Script Begin
 Write-Host "Connecting to account: Master" -f white
 Switch-RoleAlias master okta
@@ -39,13 +41,6 @@ Switch-RoleAlias master okta
 # Create Customer Gateways
 try { $tgwid = (Get-CFNExport -region $region | ? Name -like $tgwstackname).Value}
 catch { Write-Host "Transit Gateway stack does not exist, ending script" -f red ; break } #checks if pre-requisite transit gateway cf deployemnt exists and breaks script if not.
-
-#Creates 3rd octet to align with BGP ASN Assignment 
-$a=100 #starting 3rd octect for bgp interfaces (will increment based on 3rd and last digit of bgp asn)
-$a1= ("$asn").Substring(2,1)
-$a2= ("$asn").Substring(4,1)
-$concat=$a2+$a1 #concatenates substrings
-$a=($a+$concat) #calculates a plus string value of $concat (auto converts to integer)
 
 # Loop through each site to deploy a CGW in
 foreach($s in $sites){
@@ -55,8 +50,12 @@ foreach($s in $sites){
   $asn = $s.asn
   $redeploy = $s.redeploy
  
+  #Creates 3rd octet to align with Region BGP ASN Assignment 
+  $a1=("$RegionASN").Substring(2,1)#3rd place from asn
+  $a2=("$RegionASN").Substring(4,1)#last place from asn
+  $concat=$a1+$a2 #concatenates substrings
+  $a=($a+$concat) #calculates a plus string value of $concat (auto converts to integer)
   $x=0 #used for interface numbering.
-
   #Creates 4th octet
   $b1=$b
   $b2=$b+4
@@ -79,6 +78,11 @@ foreach($s in $sites){
       # Construct tunnel inside /30 ip address # 3rd octet must be between 6 and 168
       $tunnelinside01 = "169.254."+$a+".$b1/30"
       $tunnelinside02 = "169.254."+$a+".$b2/30"
+      if($redeploy -eq $true){ #get current values if redeploying, not required but will prevent issues if deployment ordering changes
+        #$tunnelinside01 = 
+        #$tunnelinside02 = 
+      }
+
       #increment for next pass
       $b1=$b2+4
       $b2=$b1+4
