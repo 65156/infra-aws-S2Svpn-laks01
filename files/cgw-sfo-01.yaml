@@ -21,8 +21,8 @@ Resources:
       TransitGatewayId: tgw-067fc30b039641df1
       Type: ipsec.1
       VpnTunnelOptionsSpecifications: 
-        - TunnelInsideCidr: 169.254.130.48/30
-        - TunnelInsideCidr: 169.254.130.52/30
+        - TunnelInsideCidr: 169.254.110.48/30
+        - TunnelInsideCidr: 169.254.110.52/30
       Tags:
         -
          Key: Name

@@ -34,6 +34,12 @@ $baseip=6 #<-- warning 1-5 is reserved by aws for octect tunnel inside ip 3rd oc
 $b=0
 $a=100 #starting 3rd octect for bgp interfaces (will increment based on 3rd and last digit of bgp asn)
 
+#Creates 3rd octet to align with Region BGP ASN Assignment 
+$a1=("$RegionASN").Substring(2,1)#3rd place from asn
+$a2=("$RegionASN").Substring(4,1)#last place from asn
+$concat=$a1+$a2 #concatenates substrings
+$a=($a+$concat) #calculates a plus string value of $concat (auto converts to integer)
+
 #Script Begin
 Write-Host "Connecting to account: Master" -f white
 Switch-RoleAlias master okta
@@ -50,11 +56,7 @@ foreach($s in $sites){
   $asn = $s.asn
   $redeploy = $s.redeploy
  
-  #Creates 3rd octet to align with Region BGP ASN Assignment 
-  $a1=("$RegionASN").Substring(2,1)#3rd place from asn
-  $a2=("$RegionASN").Substring(4,1)#last place from asn
-  $concat=$a1+$a2 #concatenates substrings
-  $a=($a+$concat) #calculates a plus string value of $concat (auto converts to integer)
+  
   $x=0 #used for interface numbering.
   #Creates 4th octet
   $b1=$b
