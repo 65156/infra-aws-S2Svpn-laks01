@@ -54,5 +54,8 @@ router bgp 65002
     neighbor 169.254.110.29 prefix-list BGP-PFFILTER-LON out
     neighbor 169.254.110.29 weight 200
     neighbor 169.254.110.29 activate
+    
   exit-address-family
 exit
+!
+clear bgp 7224

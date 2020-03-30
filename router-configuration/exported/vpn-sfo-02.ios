@@ -56,3 +56,5 @@ router bgp 65004
     neighbor 169.254.110.61 activate
   exit-address-family
 exit
+!
+clear bgp 7224
