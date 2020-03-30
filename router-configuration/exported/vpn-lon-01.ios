@@ -1,6 +1,11 @@
+route-map RM-ASPATH-LOWER-PREPEND-2 permit 11
+ set as-path prepend 65002 65002
+!
+route-map RM-ASPATH-LOWER-PREPEND-3 permit 12
+ set as-path prepend 65002 65002 65002
+!
 route OUT1 13.236.65.40 255.255.255.255 80.169.133.97 1
 route OUT1 54.66.251.86 255.255.255.255 80.169.133.97 1
-
 
 tunnel-group 13.236.65.40 type ipsec-l2l
 tunnel-group 13.236.65.40 ipsec-attributes
@@ -11,7 +16,7 @@ exit
 interface Tunnel11
   nameif AWS-AU-049a934b29f05ac2d-CGW01-TUN01		
   ip address 169.254.110.26 255.255.255.252
-  tunnel source interface 'OUT1'
+  tunnel source interface OUT1
   tunnel destination 13.236.65.40
   tunnel mode ipsec ipv4
   tunnel protection ipsec profile AWS
@@ -21,6 +26,7 @@ exit
 router bgp 65002
   address-family ipv4 unicast
     neighbor 169.254.110.25 remote-as 65100
+    neighbor 169.254.110.25 description AWS-AU-049a934b29f05ac2d-CGW01-TUN01	
     neighbor 169.254.110.25 timers 10 30 30
     neighbor 169.254.110.25 prefix-list BGP-PFFILTER-AWS in
     neighbor 169.254.110.25 prefix-list BGP-PFFILTER-LON out
@@ -39,7 +45,7 @@ exit
 interface Tunnel12
   nameif AWS-AU-049a934b29f05ac2d-CGW01-TUN02	
   ip address 169.254.110.30 255.255.255.252
-  tunnel source interface 'OUT1'
+  tunnel source interface OUT1
   tunnel destination 54.66.251.86
   tunnel mode ipsec ipv4
   tunnel protection ipsec profile AWS
@@ -49,13 +55,13 @@ exit
 router bgp 65002
   address-family ipv4 unicast
     neighbor 169.254.110.29 remote-as 65100
+    neighbor 169.254.110.29 description AWS-AU-049a934b29f05ac2d-CGW01-TUN02	
     neighbor 169.254.110.29 timers 10 30 30
+    neighbor 169.254.110.29 route-map RM-ASPATH-LOWER-PREPEND out
     neighbor 169.254.110.29 prefix-list BGP-PFFILTER-AWS in
     neighbor 169.254.110.29 prefix-list BGP-PFFILTER-LON out
-    neighbor 169.254.110.29 weight 200
+    neighbor 169.254.110.29 weight 190
     neighbor 169.254.110.29 activate
-    
+
   exit-address-family
 exit
-!
-clear bgp 7224

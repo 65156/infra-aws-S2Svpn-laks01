@@ -20,11 +20,12 @@ exit
 router bgp 65008
   address-family ipv4 unicast
     neighbor 169.254.110.97 remote-as 65100
+    neighbor 169.254.110.97 description AWS-AU-0ebc4784f679b352b-CGW02-TUN01
     neighbor 169.254.110.97 timers 10 30 30
-    neighbor 169.254.110.97 route-map RM-ASPATH-LOWER-PREPEND out
+    neighbor 169.254.110.97 route-map RM-ASPATH-LOWER-PREPEND-2 out
     neighbor 169.254.110.97 prefix-list BGP-PFFILTER-AWS in
     neighbor 169.254.110.97 prefix-list BGP-PFFILTER-HKG out
-    neighbor 169.254.110.97 weight 100 
+    neighbor 169.254.110.97 weight 180 
     neighbor 169.254.110.97 activate
   exit-address-family
 exit
@@ -49,12 +50,15 @@ exit
 router bgp 65008
   address-family ipv4 unicast
     neighbor 169.254.110.101 remote-as 65100
+    neighbor 169.254.110.101 description AWS-AU-0ebc4784f679b352b-CGW02-TUN02	
     neighbor 169.254.110.101 timers 10 30 30
-    neighbor 169.254.110.101 route-map RM-ASPATH-LOWER-PREPEND out
+    neighbor 169.254.110.101 route-map RM-ASPATH-LOWER-PREPEND-3 out
+    neighbor 169.254.110.101 route-map RM-ASPATH-LOWER-PREPEND-3 in
     neighbor 169.254.110.101 prefix-list BGP-PFFILTER-AWS in
     neighbor 169.254.110.101 prefix-list BGP-PFFILTER-HKG out
-    neighbor 169.254.110.101 weight 100 
+    neighbor 169.254.110.101 weight 170 
     neighbor 169.254.110.101 activate
+    no neighbor 169.254.35.69 activate
   exit-address-family
 exit
 !

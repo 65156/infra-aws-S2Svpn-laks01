@@ -20,6 +20,7 @@ exit
 router bgp 65006
   address-family ipv4 unicast
     neighbor 169.254.110.73 remote-as 65100
+    neighbor 169.254.110.73 description AWS-AU-0fe991297668d29c1-CGW01-TUN01	
     neighbor 169.254.110.73 timers 10 30 30
     neighbor 169.254.110.73 prefix-list BGP-PFFILTER-AWS in
     neighbor 169.254.110.73 prefix-list BGP-PFFILTER-TOR out
@@ -48,11 +49,12 @@ exit
 router bgp 65006
   address-family ipv4 unicast
     neighbor 169.254.110.77 remote-as 65100
+    neighbor 169.254.110.77 description AWS-AU-0fe991297668d29c1-CGW01-TUN02
     neighbor 169.254.110.77 timers 10 30 30
     neighbor 169.254.110.77 route-map RM-ASPATH-LOWER-PREPEND out
     neighbor 169.254.110.77 prefix-list BGP-PFFILTER-AWS in
     neighbor 169.254.110.77 prefix-list BGP-PFFILTER-TOR out
-    neighbor 169.254.110.77 weight 100 
+    neighbor 169.254.110.77 weight 190 
     neighbor 169.254.110.77 activate
   exit-address-family
 exit
